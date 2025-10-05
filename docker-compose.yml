@@ -1,4 +1,44 @@
 services:
+  todo-list-back:
+    depends_on:
+      - mysql
+    build:
+      context: ./the-royal-todo-list-back
+      dockerfile: dockerfile
+    ports:
+      - "${BACKEND_PORT:-3000}:${BACKEND_PORT:-3000}"
+    volumes:
+      - ./the-royal-todo-list-back/src:/usr/src/app/src
+      - ./the-royal-todo-list-back/prisma:/usr/src/app/prisma
+    command: npm run start:dev
+    environment:
+      - NODE_ENV=development
+      - PORT=${BACKEND_PORT:-3000}
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - my_network
+    restart: unless-stopped
+
+  todo-list-front:
+    depends_on:
+      - todo-list-back
+    build:
+      context: ./the-royal-todo-list-front
+      dockerfile: dockerfile
+      target: ${DOCKER_TARGET:-development}
+    ports:
+      - "${FRONTEND_PORT:-4200}:${FRONTEND_PORT:-4200}"
+    volumes:
+      # Only mount source code in development mode
+      - ./the-royal-todo-list-front/src:/usr/src/app/src:ro
+      - ./the-royal-todo-list-front/public:/usr/src/app/public:ro
+    environment:
+      - NODE_ENV=development
+      - API_BASE_URL=http://todo-list-back:${BACKEND_PORT:-3000}
+    networks:
+      - my_network
+    restart: unless-stopped
+
   mysql:
     image: mysql:8.0
     container_name: mysql_db
@@ -14,6 +54,10 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - my_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
 volumes:
   mysql_data:
