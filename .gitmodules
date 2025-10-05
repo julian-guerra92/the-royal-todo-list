@@ -1,0 +1,6 @@
+[submodule "the-royal-todo-list-back"]
+	path = the-royal-todo-list-back
+	url = https://github.com/julian-guerra92/the-royal-todo-list-back
+[submodule "the-royal-todo-list-front"]
+	path = the-royal-todo-list-front
+	url = https://github.com/julian-guerra92/the-royal-todo-list-front
