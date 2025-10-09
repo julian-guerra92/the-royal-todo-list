@@ -1,6 +1,6 @@
 # The Royal To-Do List
 
-A sophisticated task management application with mystical twist, featuring curse validation and palindrome detection capabilities. Built with a modern microservices architecture using NestJS backend and Angular frontend.
+A sophisticated task management application with mystical twist, featuring curse validation and palindrome detection capabilities. Built with a modern microservices architecture using NestJS backend, Angular frontend and mySQL database.
 
 ## 🏗️ Architecture Overview
 
